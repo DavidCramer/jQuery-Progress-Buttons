@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--
+/*
+* jQuery Progress Button Demo 1.0.0
+* https://github.com/Desertsnowman/jQuery-Progress-Buttons
+*
+* Copyright 2012, David Cramer
+* http://digilab.co.za
+*
+* Licensed under the MIT license:
+* http://www.opensource.org/licenses/MIT
+*/
+-->
+<html lang="en">
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <title>Progress Button</title>       
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'></script>
+        <script type='text/javascript' src='js/progressbutton.jquery.js'></script>
+        
+        <style type="text/css">           
+            article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
+            body {line-height: 1;padding:5px 20px;font-family: 'Open Sans', sans-serif;}
+            h1,h2,h3,h4,h5,h6{font-weight: normal;}
+            ol, ul {list-style: none;}
+            blockquote, q {quotes: none;}
+            blockquote:before, blockquote:after,q:before, q:after {content: '';content: none;}
+            table{border-collapse: collapse;border-spacing: 0;}
+            .button,.button:disabled:hover {border: 1px solid #DDD;border-radius: 3px;text-shadow: 0 1px 1px white;box-shadow: 0 1px 1px #fff;font: bold 11px;padding: 6px 10px;white-space: nowrap;vertical-align: middle;color: #666;background: #fafafa;cursor: pointer;-webkit-transition: all 0.2s ease-in-out;-moz-transition: all 0.2s ease-in-out;-ms-transition: all 0.2s ease-in-out;-o-transition: all 0.2s ease-in-out;transition: all 0.2s ease-in-out;}
+            .button:hover {border-color: #999;background: -moz-linear-gradient(top,white 0,#E0E0E0 100%);background: linear-gradient(top,white 0,#E0E0E0 100%);box-shadow: 0 1px 2px rgba(0,0,0,0.25), inset 0 0 3px #fff;}
+            .button:active, .button:focus {border: 1px solid #AAA;border-bottom-color: #CCC;border-top-color: #999;box-shadow: inset 0 1px 2px #aaa;background: linear-gradient(top,#E6E6E6 0,gainsboro 100%);background: -moz-linear-gradient(top,#E6E6E6 0,gainsboro 100%);}
+            .button:after {content: “”;display: inline-block;width: 0;height: 0;border-top: 4px solid #999;border-left: 4px solid transparent;border-right: 4px solid transparent;margin: 0 0 0 4px;position: relative;top: -1px;}
+            .button:hover:after {border-top-color: black;}
+            .button:disabled, .button:disabled:hover{color: #999;}
+            .main{padding: 10px 20px;}
+            #standard{
+                display: block;                
+                height: 5px;
+                background-color: #efefef;
+                margin-bottom: 20px;
+                border-radius: 2px;
+            }
+        </style>        
+    </head>
+    <body class="previewCanvas">
+        
+            <h1>Progress Button Examples.</h1>
+            <button class="button test" data-opacity="0.2">Example</button>
+            <button class="button test" >A Button</button>
+            <button class="button test disable" data-color="#ff0011" data-opacity="0.1">Disables on Click</button>
+            <button class="button test">YABTT</button>
+            <button class="button test disable" data-opacity="0.91" data-color="#abfa00">Great for use as an uploader button so take up less space.</button>
+            <br /><br />
+            <button class="button main" data-percent="50" data-opacity="0.91" data-color="#abfa00">Control Button Below</button>
+            <br /><br />
+            <button id="twenty" class="button action" data-percent="20">Set to 20%</button>
+            <button id="forty" class="button action" data-percent="40">Set to 40%</button>
+            <button id="eighty" class="button action" data-percent="80">Set to 80%</button>
+            <button id="hundred" class="button action" data-percent="100">Set to 100%</button>
+            <br /><br />
+            <button class="button color" data-color="#ff3087">Pink</button>            
+            <button class="button color" data-color="#ff8b00">Orange</button>            
+            <button class="button color" data-color="#06adff">Blue</button>            
+            <button class="button color" data-color="#43f700">Green</button>            
+            <br /><br />
+            <button class="button opacity" data-opacity="0.05">Opacity 5%</button>            
+            <button class="button opacity" data-opacity="0.1">Opacity 10%</button>            
+            <button class="button opacity" data-opacity="0.2">Opacity 20%</button>            
+            <button class="button opacity" data-opacity="0.5">Opacity 50%</button>            
+            <button class="button opacity" data-opacity="0.8">Opacity 80%</button>            
+            <button class="button opacity" data-opacity="1">Opacity 100%</button>            
+            <br /><br /><br />
+            <h2>bonus! works on any element too.</h2>
+            <div id="standard" data-opacity="0.8"></div>
+            <button class="button other">Div Bar</button>            
+        
+        <script>
+            jQuery(document).ready(function($){
+                var interval;
+                var bar = jQuery('.main').progressbutton();
+                jQuery('#reset').click(function(){
+                    clearInterval(interval);
+                    if(bar){
+                        bar.progressbutton('reset');
+                    }
+                });        
+                jQuery('.color').click(function(){
+                    //clearInterval(interval);
+                    var clicked = jQuery(this);
+                    bar.progressbutton({
+                        color: clicked.data('color')
+                    });
+                });
+                jQuery('.opacity').click(function(){
+                    //clearInterval(interval);
+                    var clicked = jQuery(this);
+                    bar.progressbutton({
+                        opacity: clicked.data('opacity')
+                    });
+                });
+
+                jQuery('.test').click(function(){
+                    var itm = jQuery(this);
+                    if(itm.hasClass('disable')){
+                        itm.attr('disabled','disabled');
+                    }
+                    var bar = itm.progressbutton({
+                        percent: -1
+                    });
+                    var clock = 0;
+                    
+                    var interval = setInterval(function(){
+                        bar.progressbutton({
+                            percent: clock
+                        });
+                        clock = clock+0.5;
+                        if(clock > 100){
+                            itm.removeAttr('disabled');
+                            clearInterval(interval);
+                            bar.progressbutton('reset');
+                        }
+                    }, 30);
+                });
+                jQuery('.action').click(function(){
+                    clearInterval(interval);
+                    var clicked = jQuery(this);
+                    bar.progressbutton({
+                        percent: clicked.data('percent')
+                    });
+                });
+                jQuery('.other').click(function(){
+                    var itm = jQuery('#standard');
+                    var bar = itm.progressbutton({
+                        percent: -1
+                    });
+                    var clock = 0;
+                    
+                    var interval = setInterval(function(){
+                        bar.progressbutton({
+                            percent: clock
+                        });
+                        clock = clock+0.5;
+                        if(clock > 100){
+                            clearInterval(interval);
+                            bar.progressbutton('reset');
+                        }
+                    }, 30);
+                });
+        
+            
+            });
+        
+        </script>
+    </body>
+</html>
